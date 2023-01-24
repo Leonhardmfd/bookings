@@ -20,7 +20,6 @@ func TestAddDefaultData(t *testing.T) {
 	if result.Flash != "123" {
 		t.Error("flash value of 123 not found in session")
 	}
-
 }
 
 func TestRenderTemplate(t *testing.T) {
@@ -48,7 +47,6 @@ func TestRenderTemplate(t *testing.T) {
 	if err == nil {
 		t.Error("rendered template that does not exist")
 	}
-
 }
 
 func getSession() (*http.Request, error) {

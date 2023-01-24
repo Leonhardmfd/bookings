@@ -61,7 +61,6 @@ func RenderTemplate(w http.ResponseWriter, r *http.Request, tmpl string, td *mod
 	}
 
 	return nil
-
 }
 
 // CreateTemplateCache creates a template cache as a map

@@ -2,13 +2,16 @@ package main
 
 import (
 	"encoding/gob"
+	"fmt"
 	"github.com/alexedwards/scs/v2"
 	"github.com/tsawler/bookings/internal/config"
 	"github.com/tsawler/bookings/internal/handlers"
+	"github.com/tsawler/bookings/internal/helpers"
 	"github.com/tsawler/bookings/internal/models"
 	"github.com/tsawler/bookings/internal/render"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -16,6 +19,8 @@ const portNumber = ":8080"
 
 var app config.AppConfig
 var session *scs.SessionManager
+var infoLog *log.Logger
+var errorLog *log.Logger
 
 // main is the main function
 func main() {
@@ -24,7 +29,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	log.Printf("Staring application on port %s", portNumber)
+	fmt.Println(fmt.Sprintf("Staring application on port %s", portNumber))
 
 	srv := &http.Server{
 		Addr:    portNumber,
@@ -43,6 +48,12 @@ func run() error {
 
 	// change this to true when in production
 	app.InProduction = false
+
+	infoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	app.InfoLog = infoLog
+
+	errorLog = log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+	app.ErrorLog = errorLog
 
 	// set up the session
 	session = scs.New()
@@ -64,7 +75,8 @@ func run() error {
 
 	repo := handlers.NewRepo(&app)
 	handlers.NewHandlers(repo)
-
 	render.NewTemplates(&app)
+	helpers.NewHelpers(&app)
+
 	return nil
 }
