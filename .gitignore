@@ -1,5 +1,5 @@
 .idea
 .DS_Store
 coverage
-run.sh
+run.bat
 database.yml
